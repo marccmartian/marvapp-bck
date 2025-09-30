@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { UserController } from "./controller";
+import { RegisterUserValidator } from "../../config/validators/user/register.validator";
+import { validateFields } from "../middlewares/validate-fields.middleware";
 
 export class UserRoutes {
 
@@ -7,8 +9,8 @@ export class UserRoutes {
         const router = Router();
         const userController = new UserController()
 
+        router.post('/register', RegisterUserValidator.rules, validateFields, userController.registerUser);
         router.post('/login', userController.loginUser);
-        router.post('/register', userController.registerUser);
         router.get('/', userController.getUsers);
 
         return router;

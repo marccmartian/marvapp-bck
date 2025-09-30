@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch --clear-screen=false --env-file=.env src/app.ts"
+    "dev": "tsx watch --clear-screen=true --env-file=.env src/app.ts"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "env-var": "^7.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "uuid": "^13.0.0"
   }
 }
