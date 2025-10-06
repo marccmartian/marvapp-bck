@@ -1,13 +1,16 @@
 import { Request, Response } from "express";
 import { RegisterUserDto } from "../../domain/dtos/users/register-user.dto";
+import { UserRepository } from "../../domain/repositories/user.repository";
 
 export class UserController {
-    constructor(){}
+    constructor(
+        private readonly userRepository: UserRepository
+    ){}
 
     registerUser = (req: Request, res: Response) => {
         const registerUserDto = RegisterUserDto.create(req.body);
-        console.log(registerUserDto);        
-        res.json(registerUserDto);
+        this.userRepository.register(registerUserDto)
+        .then(user => res.json(user));
     }
 
     loginUser = (req:Request, res: Response) => {
