@@ -11,9 +11,10 @@ model User {
     password  String
     role      Role      @default(USER)
     avatar    String?
-    status    Boolean   @default(true)
+    status    Boolean   @default(false)
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     
     projects  Project[]
+    @@index([name, surname, email])
 }

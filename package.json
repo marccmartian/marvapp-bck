@@ -13,6 +13,7 @@
   "packageManager": "pnpm@10.17.1",
   "devDependencies": {
     "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.5.2",
     "dotenv": "^17.2.3",
     "prisma": "^6.16.3",
@@ -21,9 +22,10 @@
   },
   "dependencies": {
     "@prisma/client": "6.16.3",
+    "bcryptjs": "^3.0.2",
     "env-var": "^7.5.0",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
-    "uuid": "^13.0.0"
+    "jsonwebtoken": "^9.0.2"
   }
 }

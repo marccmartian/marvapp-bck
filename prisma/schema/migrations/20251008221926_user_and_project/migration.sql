@@ -27,7 +27,7 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'USER',
     "avatar" TEXT,
-    "status" BOOLEAN NOT NULL DEFAULT true,
+    "status" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -35,7 +35,13 @@ CREATE TABLE "User" (
 );
 
 -- CreateIndex
+CREATE INDEX "Project_title_description_idx" ON "Project"("title", "description");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE INDEX "User_name_surname_email_idx" ON "User"("name", "surname", "email");
 
 -- AddForeignKey
 ALTER TABLE "Project" ADD CONSTRAINT "Project_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

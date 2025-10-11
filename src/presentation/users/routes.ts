@@ -4,6 +4,8 @@ import { RegisterUserValidator } from "../../config/validators/user/register.val
 import { validateFields } from "../middlewares/validate-fields.middleware";
 import { UserDatasourceImp } from "../../infrastructure/datasources/user.datasource.imp";
 import { UserRepositoryImp } from "../../infrastructure/repositories/user.repository.imp";
+import { validateJwt } from "../middlewares/auth.middleware";
+import { LoginUserValidator } from "../../config/validators/user/login.validator";
 
 export class UserRoutes {
 
@@ -14,8 +16,8 @@ export class UserRoutes {
         const userController = new UserController(userRepository);
 
         router.post('/register', RegisterUserValidator.rules, validateFields, userController.registerUser);
-        router.post('/login', userController.loginUser);
-        router.get('/', userController.getUsers);
+        router.post('/login', LoginUserValidator.rules, validateFields, userController.loginUser);
+        router.get('/', validateJwt, userController.getUsers);
 
         return router;
     }
