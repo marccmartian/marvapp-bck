@@ -8,5 +8,6 @@ export abstract class UserDatasource {
     abstract register(registerUserDto: RegisterUserDto): Promise<UserResponseDto>;
     abstract login(loginUserDto: LoginUserDto): Promise<UserResponseDto>;   
     abstract getAll(): Promise<UserEntity[]>;
+    abstract validateEmail(token: string): Promise<boolean>;
 
 }

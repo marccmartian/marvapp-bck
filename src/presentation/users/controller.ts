@@ -6,6 +6,7 @@ import { handleError } from "../../domain/errors/handleError";
 import { GetUsersUseCase } from "../../domain/use-cases/user/get-all.use-case";
 import { LoginUserUseCase } from "../../domain/use-cases/user/login.use-case";
 import { LoginUserDto } from "../../domain/dtos/users/login-user.dto";
+import { ValidateEmailUseCase } from "../../domain/use-cases/user/validate-email.use-case";
 
 export class UserController {
 
@@ -35,6 +36,14 @@ export class UserController {
         new GetUsersUseCase(this.userRepository)
             .execute()
             .then(users => res.json(users))
+            .catch(error => handleError(error, res));
+    }
+
+    validateEmail = (req: Request, res: Response) => {
+        const token = req.params.token;     
+        new ValidateEmailUseCase(this.userRepository)
+            .execute(token!)
+            .then(() => res.json('Email was validated properly'))
             .catch(error => handleError(error, res));
     }
 }

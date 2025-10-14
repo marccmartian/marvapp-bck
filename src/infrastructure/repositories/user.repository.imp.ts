@@ -19,6 +19,10 @@ export class UserRepositoryImp implements UserRepository {
         return this.userDatasource.login(loginUserDto);
     }
 
+    validateEmail(token: string): Promise<boolean> {
+        return this.userDatasource.validateEmail(token);
+    }
+
     getAll(): Promise<UserEntity[]> {
         return this.userDatasource.getAll();
     }
