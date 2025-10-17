@@ -1,6 +1,7 @@
 import { body } from "express-validator";
 import { StringSanitizer } from "../helpers/string-sanitizer";
 
+
 export class RegisterUserValidator {
 
     static rules = [

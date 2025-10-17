@@ -40,7 +40,7 @@ export class EmailAdapter {
                 html: htmlBody,
                 attachments
             });
-            console.log(info);
+            // console.log(info);
             return true
         } catch (error) {            
             return false

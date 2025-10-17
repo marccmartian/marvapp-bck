@@ -1,4 +1,5 @@
 import express, {Express, Router} from 'express';
+import http from 'http';
 
 interface Options {
     public_path?: string;
@@ -9,6 +10,7 @@ interface Options {
 export class Server {
 
     public readonly app: Express = express();
+    private serverListener?: http.Server;
     private readonly publicPath: string;
     private readonly port: number;
     private readonly routes: Router;
@@ -18,16 +20,27 @@ export class Server {
         this.publicPath = public_path
         this.port = port;
         this.routes = routes;
+
+        this.configureApp();
     }
-    
-    public start(){
+
+    private configureApp() {
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended: true}));
         this.app.use(this.routes);
-
-        this.app.listen(this.port, () => {
+        this.app.use(express.static(this.publicPath));
+    }
+    
+    public start(){
+        this.serverListener = this.app.listen(this.port, () => {
             console.log(`Server running on port ${this.port} 😎`);
         });
+
+        return this.serverListener;
+    }
+
+    public close() {
+        this.serverListener?.close();
     }
 
 }

@@ -10,21 +10,21 @@ export class UserRepositoryImp implements UserRepository {
     constructor(
         private readonly userDatasource: UserDatasource
     ){}
+
+    async findByEmail(email: string): Promise<UserEntity | null> {
+        return await this.userDatasource.findByEmail(email);
+    }
         
-    register(registerUserDto: RegisterUserDto): Promise<UserResponseDto> {
-        return this.userDatasource.register(registerUserDto);
+    async register(registerUserDto: RegisterUserDto): Promise<UserEntity> {
+        return await this.userDatasource.register(registerUserDto);
     }
 
-    login(loginUserDto: LoginUserDto): Promise<UserResponseDto> {
-        return this.userDatasource.login(loginUserDto);
+    async update(userEntity: UserEntity): Promise<UserEntity> {
+        return await this.userDatasource.update(userEntity);
     }
-
-    validateEmail(token: string): Promise<boolean> {
-        return this.userDatasource.validateEmail(token);
-    }
-
-    getAll(): Promise<UserEntity[]> {
-        return this.userDatasource.getAll();
+    
+    async getAll(): Promise<UserEntity[]> {
+        return await this.userDatasource.getAll();
     }
 
 }

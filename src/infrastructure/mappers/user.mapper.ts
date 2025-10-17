@@ -1,6 +1,5 @@
 import { User } from "@prisma/client";
-import { UserEntity } from "../../domain/entities/user.entity";
-import { UserResponseDto } from "../../domain/dtos/users/response-user.dto";
+import { UserEntity, UserResponseDto } from "../../domain";
 
 export class UserMapper {
 

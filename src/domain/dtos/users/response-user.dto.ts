@@ -7,7 +7,7 @@ class UserPublicDataDto {
         public surname: string,
         public email: string,
         public role: string,
-        public status: boolean
+        public isEmailValidated: boolean
     ) {}
 }
 
@@ -24,7 +24,7 @@ export class UserResponseDto {
             entity.surname,
             entity.email,
             entity.role,
-            entity.status
+            entity.isEmailValidated
         );
 
         return new UserResponseDto(userData, token);

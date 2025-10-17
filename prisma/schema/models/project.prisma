@@ -1,15 +1,16 @@
 model Project {
-    id          String   @id @default(uuid())
+    id          String     @id @default(uuid())
     userId      String
-    title       String
+    title       String     @unique
     description String
-    imageUrl    String
+    imageUrl    String?
     githubUrl   String
     prodUrl     String
-    status      Boolean  @default(true)
-    isTop       Boolean  @default(false)
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+    status      Boolean    @default(true)
+    isTop       Boolean    @default(false)
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
+    categories  Category[]
 
     user User @relation(fields: [userId], references: [id])
     @@index([title, description])

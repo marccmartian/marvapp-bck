@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { UserRoutes } from "./users/routes";
 
 export class AppRoutes {
 
-    static get router(): Router {
+    static getRoutes(userRoutes: Router, projectRoutes: Router): Router {
         const router = Router();
 
-        router.use('/api/user', UserRoutes.routes);
+        router.use('/api/user', userRoutes);
+        router.use('/api/project', projectRoutes);
 
         return router;
     }

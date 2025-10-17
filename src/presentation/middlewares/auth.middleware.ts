@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { JwtAdapter } from "../../config/jwt.adapter";
-import { prisma } from "../../data/postgres/prisma-client";
+import { prisma } from "../../infrastructure/database/prisma/prisma-client";
 
 const errorResponse = (res: Response) => res.status(401).json("Invalid Token 😒");
 
@@ -17,6 +17,8 @@ export const validateJwt = async (req: Request, res: Response, next: NextFunctio
 
         const user = await prisma.user.findUnique({where: {id: payload.id}});
         if(!user) return errorResponse(res);
+
+        if(!user.isEmailValidated) return res.status(401).json("User inactive");
         
         if(req.body) req.body.user = user;
         next();

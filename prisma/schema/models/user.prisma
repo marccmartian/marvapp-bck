@@ -1,20 +1,22 @@
 enum Role {
-    USER
     ADMIN
+    EDITOR
+    VIEWER
 }
 
 model User {
-    id        String    @id @default(uuid())
-    name      String
-    surname   String
-    email     String    @unique
-    password  String
-    role      Role      @default(USER)
-    avatar    String?
-    status    Boolean   @default(false)
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    
-    projects  Project[]
+    id               String   @id @default(uuid())
+    name             String
+    surname          String
+    email            String   @unique
+    password         String
+    role             Role     @default(VIEWER)
+    avatar           String?
+    isEmailValidated Boolean  @default(false)
+    createdAt        DateTime @default(now())
+    updatedAt        DateTime @updatedAt
+
+    projects Project[]
+
     @@index([name, surname, email])
 }
