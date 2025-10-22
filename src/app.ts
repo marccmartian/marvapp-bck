@@ -1,6 +1,6 @@
 import { EmailServiceImp, GetUsersUseCase, LoginUserUseCase, RegisterUserUseCase, ValidateEmailUseCase } from "./aplication";
-import { EmailAdapter, envs } from "./config";
-import { ProjectDatasourceImp, ProjectRepositoryImp, UserDatasourceImp, UserRepositoryImp } from "./infrastructure";
+import { CreateProjectUseCase } from "./aplication/use-cases/project/create.use-case";
+import { EmailAdapter, envs, ProjectDatasourceImp, ProjectRepositoryImp, UserDatasourceImp, UserRepositoryImp } from "./infrastructure";
 import { AppRoutes, ProjectController, ProjectRoutes, Server, UserController, UserRoutes } from "./presentation";
 
 (async () => {
@@ -15,6 +15,7 @@ async function main() {
             envs.MAILER_SECRET_KEY
         );
 
+        // User module
         const emailService = new EmailServiceImp(emailAdapter);
         const userDatasource = new UserDatasourceImp();
         const userRepository = new UserRepositoryImp(userDatasource);
@@ -30,10 +31,14 @@ async function main() {
 
         const userRoutes = UserRoutes.getRoutes(userController);
 
+        // Project Module
         const projectRepository = new ProjectRepositoryImp(new ProjectDatasourceImp());
-        const projectController = new ProjectController(projectRepository);
+        const createProjectUseCase = new CreateProjectUseCase(projectRepository);
+        const projectController = new ProjectController(createProjectUseCase);
+
         const projectRoutes = ProjectRoutes.getRoutes(projectController);
 
+        // Server
         const server = new Server({
             port: envs.PORT,
             routes: AppRoutes.getRoutes(userRoutes, projectRoutes)

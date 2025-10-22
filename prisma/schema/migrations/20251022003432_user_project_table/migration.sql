@@ -39,6 +39,15 @@ CREATE TABLE "User" (
 CREATE UNIQUE INDEX "Project_title_key" ON "Project"("title");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Project_imageUrl_key" ON "Project"("imageUrl");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Project_githubUrl_key" ON "Project"("githubUrl");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Project_prodUrl_key" ON "Project"("prodUrl");
+
+-- CreateIndex
 CREATE INDEX "Project_title_description_keywords_idx" ON "Project"("title", "description", "keywords");
 
 -- CreateIndex

@@ -9,6 +9,10 @@ export class ProjectRepositoryImp implements ProjectRepository {
         private readonly projectDatasource: ProjectDatasource
     ){}
 
+    findProject(createProjectDto: CreateProjectDto): Promise<ProjectEntity | null> {
+        return this.projectDatasource.findProject(createProjectDto);
+    }
+
     createProject(createProjectDto: CreateProjectDto): Promise<ProjectEntity> {
         return this.projectDatasource.createProject(createProjectDto);
     }

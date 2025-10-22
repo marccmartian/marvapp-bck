@@ -1,4 +1,4 @@
-import { BcryptAdapter, JwtAdapter } from "../../../config";
+import { BcryptAdapter, JwtAdapter } from "../../../infrastructure";
 import { CustomError, RegisterUserDto, UserRepository, UserResponseDto } from "../../../domain";
 import { EmailService } from "../../services/email.service";
 

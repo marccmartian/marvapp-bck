@@ -3,32 +3,52 @@ import { CustomError } from "../errors/custom-errors";
 export class ProjectEntity {
 
     constructor(
-        public id: string,
+        public readonly id: string,
         public title: string,
         public description: string,
+        public keywords: string[],
         public imageUrl: string | null,
         public githubUrl: string,
         public prodUrl: string,
-        public status: boolean,
-        public isTop: boolean,
-        public createdAt: Date,
+        private _status: boolean,
+        private _isTop: boolean,
+        public readonly createdAt: Date,
         public updatedAt: Date,
     ){}
 
+    public get status(): boolean {
+        return this._status;
+    }
+
+    public get isTop(): boolean {
+        return this._isTop;
+    }
+
+    public switchStatus(): void {
+        this._status = !this._status;
+        this.touch();
+    }
+
+    public swtichTop() {
+        this._isTop = !this._isTop;
+        this.touch();
+    }
+
+    public touch() {
+        this.updatedAt = new Date();
+    }
+
     static fromObject(object: {[key: string]: any}): ProjectEntity {
-        const {id, title, description, imageUrl, githubUrl, prodUrl, status, isTop, createdAt, updatedAt} = object;
+        const {id, title, description, keywords, imageUrl, githubUrl, prodUrl, status, isTop, createdAt, updatedAt} = object;
 
-        if(!id) throw CustomError.badRequest("Missing id");
-        if(!title) throw CustomError.badRequest("Missing title");
-        if(!description) throw CustomError.badRequest("Missing description");
-        if(!githubUrl) throw CustomError.badRequest("Missing githubUrl");
-        if(!prodUrl) throw CustomError.badRequest("Missing prodUrl");
-        if(!status === undefined) throw CustomError.badRequest("Missing status");
-        if(!isTop === undefined) throw CustomError.badRequest("Missing isTop");
-        if(!createdAt) throw CustomError.badRequest("Missing createdAt");
-        if(!updatedAt) throw CustomError.badRequest("Missing updatedAt");
+        if(!id) throw CustomError.internalServer("Project entity mapping error: Missing ID");
 
-        return new ProjectEntity(id, title, description, imageUrl, githubUrl, prodUrl, status, isTop, createdAt, updatedAt);
+        return new ProjectEntity(
+            id, title, description, keywords,
+            imageUrl, githubUrl, prodUrl,
+            status, isTop,
+            new Date(createdAt), new Date(updatedAt)
+        );
     }
 
 }

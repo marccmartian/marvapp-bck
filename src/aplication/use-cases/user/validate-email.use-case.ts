@@ -1,4 +1,4 @@
-import { JwtAdapter } from "../../../config";
+import { JwtAdapter } from "../../../infrastructure";
 import { CustomError, UserRepository } from "../../../domain";
 
 interface ValidateEmailI {

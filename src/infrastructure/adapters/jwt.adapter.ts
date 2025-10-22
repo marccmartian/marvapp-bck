@@ -1,6 +1,7 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { envs } from './envs.adapter';
 
+
 const JWT_SEED = envs.JWT_SEED;
 
 export class JwtAdapter {

@@ -5,16 +5,20 @@ export class CreateProjectDto {
     constructor(
         public title: string,
         public description: string,
+        public keywords: string[],
         public githubUrl: string,
         public prodUrl: string,
         public userId: string,
     ){}
 
     static create(data: Partial<CreateProjectDto>): CreateProjectDto {
-        const {title, description, githubUrl, prodUrl, userId} = data;
-        if(!userId) throw CustomError.badRequest("User Id has not been provided");
+        const {title, description, keywords, githubUrl, prodUrl, userId} = data;
         
-        return new CreateProjectDto(title!, description!, githubUrl!, prodUrl!, userId!);
+        if(!title || ! description || !keywords || !githubUrl || !prodUrl || !userId) {
+            throw CustomError.internalServer("Missing required fields for porject DTO creation.");
+        }
+        
+        return new CreateProjectDto(title, description, keywords, githubUrl, prodUrl, userId);
     }
 
 }

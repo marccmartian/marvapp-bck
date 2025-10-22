@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { JwtAdapter } from "../../config/jwt.adapter";
 import { prisma } from "../../infrastructure/database/prisma/prisma-client";
+import { JwtAdapter } from "../../infrastructure";
 
 const errorResponse = (res: Response) => res.status(401).json("Invalid Token 😒");
 

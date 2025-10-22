@@ -13,7 +13,7 @@ export class RegisterUserDto {
         const {name, surname, email, password} = data;
 
         if(!name || !surname || !email || !password) {
-            throw CustomError.internalServer("Missing required fields for DTO creation.");
+            throw CustomError.internalServer("Missing required fields for user DTO creation.");
         }
 
         return new RegisterUserDto(name, surname, email, password);

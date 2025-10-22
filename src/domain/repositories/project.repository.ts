@@ -1,8 +1,10 @@
 import { CreateProjectDto } from "../dtos/projects/create-project.dto";
 import { ProjectEntity } from "../entities/project.entity";
 
-export abstract class ProjectRepository {
+export interface ProjectRepository {
 
-    abstract createProject(createProjectDto: CreateProjectDto): Promise<ProjectEntity>;
+    findProject(createProjectDto: CreateProjectDto): Promise<ProjectEntity | null>;    
+
+    createProject(createProjectDto: CreateProjectDto): Promise<ProjectEntity>;
 
 }

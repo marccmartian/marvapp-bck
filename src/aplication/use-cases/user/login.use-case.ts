@@ -1,4 +1,4 @@
-import { BcryptAdapter, JwtAdapter } from "../../../config";
+import { BcryptAdapter, JwtAdapter } from "../../../infrastructure";
 import { CustomError, LoginUserDto, UserRepository, UserResponseDto } from "../../../domain";
 
 interface LoginUserI {

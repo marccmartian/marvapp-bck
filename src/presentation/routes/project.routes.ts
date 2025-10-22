@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ProjectController } from "./controller";
+import { ProjectController } from "../controllers/project.controller";
 import { CreateProjectValidator } from "../middlewares/validators/project/create.validator";
 import { validateFields } from "../middlewares/validate-fields.middleware";
 import { validateJwt } from "../middlewares/auth.middleware";

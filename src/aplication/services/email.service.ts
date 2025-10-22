@@ -1,5 +1,5 @@
-import { EmailAdapter } from "../../config/email.adapter";
-import { envs } from "../../config/envs.adapter";
+import { EmailAdapter } from "../../infrastructure/adapters/email.adapter";
+import { envs } from "../../infrastructure/adapters/envs.adapter";
 import { CustomError } from "../../domain/errors/custom-errors";
 
 export interface EmailService {

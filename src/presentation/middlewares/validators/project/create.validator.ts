@@ -16,6 +16,18 @@ export class CreateProjectValidator {
             .isLength({ min: 5 }).withMessage("Tile must have at least 5 characters")
             .customSanitizer(value => StringSanitizer.capitalizeWords(value)),
         
+        body("keywords")
+            .notEmpty().withMessage("Missing keywords")
+            .bail()
+            .isArray().withMessage("keywords must be an array")
+            .custom(value => value.length >= 2).withMessage("keywords must be greater than one"),
+        
+        body("keywords.*") 
+            .isString().withMessage("Each keyword must be a string")
+            .bail()
+            .isLength({ min: 3 }).withMessage("Each keyword must have at least 3 characters")
+            .customSanitizer(value => StringSanitizer.capitalizeWords(value)),
+        
         body("githubUrl")
             .notEmpty().withMessage("Missing githubUrl")
             .bail()
