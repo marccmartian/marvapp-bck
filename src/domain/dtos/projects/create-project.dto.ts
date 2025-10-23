@@ -15,7 +15,7 @@ export class CreateProjectDto {
         const {title, description, keywords, githubUrl, prodUrl, userId} = data;
         
         if(!title || ! description || !keywords || !githubUrl || !prodUrl || !userId) {
-            throw CustomError.internalServer("Missing required fields for porject DTO creation.");
+            throw CustomError.internalServer("Missing required fields for project DTO creation.");
         }
         
         return new CreateProjectDto(title, description, keywords, githubUrl, prodUrl, userId);

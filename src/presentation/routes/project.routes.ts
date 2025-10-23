@@ -3,6 +3,7 @@ import { ProjectController } from "../controllers/project.controller";
 import { CreateProjectValidator } from "../middlewares/validators/project/create.validator";
 import { validateFields } from "../middlewares/validate-fields.middleware";
 import { validateJwt } from "../middlewares/auth.middleware";
+import { UpdateProjectValidator } from "../middlewares/validators/project/update.validator";
 
 export class ProjectRoutes {
 
@@ -11,7 +12,8 @@ export class ProjectRoutes {
 
         router.post('/create', CreateProjectValidator.rules, validateFields, validateJwt, controller.createProject);
         router.get('/', controller.getProjects);
-        router.put('/:id', controller.updateProject);
+        router.put('/:id', UpdateProjectValidator.rules, validateFields, validateJwt, controller.updateProject);
+        router.get('/:id', validateJwt, controller.toogleIsTop);
         router.delete('/:id', controller.deleteProject);
 
         return router;

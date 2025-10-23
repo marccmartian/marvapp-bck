@@ -4,6 +4,7 @@ export * from './middlewares/auth.middleware';
 export * from './middlewares/validate-fields.middleware';
 export * from './middlewares/validators/helpers/string-sanitizer';
 export * from './middlewares/validators/project/create.validator';
+export * from './middlewares/validators/project/update.validator';
 export * from './middlewares/validators/user/register.validator';
 export * from './middlewares/validators/user/login.validator';
 export * from './routes/app.routes';

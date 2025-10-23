@@ -10,27 +10,27 @@ export class ProjectEntity {
         public imageUrl: string | null,
         public githubUrl: string,
         public prodUrl: string,
-        private _status: boolean,
-        private _isTop: boolean,
+        private status: boolean,
+        private isTop: boolean,
         public readonly createdAt: Date,
         public updatedAt: Date,
     ){}
 
-    public get status(): boolean {
-        return this._status;
+    public get getStatus(): boolean {
+        return this.status;
     }
 
-    public get isTop(): boolean {
-        return this._isTop;
+    public get getIsTop(): boolean {
+        return this.isTop;
     }
 
-    public switchStatus(): void {
-        this._status = !this._status;
+    public toogleStatus(): void {
+        this.status = !this.status;
         this.touch();
     }
 
-    public swtichTop() {
-        this._isTop = !this._isTop;
+    public toogleIsTop() {
+        this.isTop = !this.isTop;
         this.touch();
     }
 

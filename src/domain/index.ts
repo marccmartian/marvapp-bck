@@ -4,6 +4,7 @@ export * from './dtos/users/register-user.dto';
 export * from './dtos/users/login-user.dto';
 export * from './dtos/users/response-user.dto';
 export * from './dtos/projects/create-project.dto';
+export * from './dtos/projects/update-project.dto';
 export * from './entities/user.entity';
 export * from './entities/project.entity';
 export * from './enums/user-role.enum';

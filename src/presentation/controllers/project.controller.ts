@@ -1,12 +1,15 @@
 import { Request, Response } from "express";
-import { CreateProjectDto, handleError } from "../../domain";
-import { CreateProjectUseCase } from "../../aplication/use-cases/project/create.use-case";
+import { CreateProjectUseCase, GetProjectsUseCase, ToogleIsTopUseCase, UpdateProjectUseCase } from "../../aplication";
+import { CreateProjectDto, handleError, UpdateProjectDto } from "../../domain";
 
 
 export class ProjectController {
 
     constructor(
-        private readonly createProjectUseCase: CreateProjectUseCase
+        private readonly createProjectUseCase: CreateProjectUseCase,
+        private readonly getProjectsUseCase: GetProjectsUseCase,
+        private readonly updateProjectUseCase: UpdateProjectUseCase,
+        private readonly toogleIsTopUseCase: ToogleIsTopUseCase,
     ){}
 
     createProject = (req: Request, res: Response) => {
@@ -20,11 +23,29 @@ export class ProjectController {
     }
     
     getProjects = (req: Request, res: Response) => {
-        res.json("get projects");
+        this.getProjectsUseCase
+            .execute()
+            .then(projects => res.json(projects))
+            .catch(error => handleError(error, res));
     }
 
     updateProject = (req: Request, res: Response) => {
-        res.json("update project");
+        const id = req.params.id || '';
+        const updateProjectDto = UpdateProjectDto.create(req.body);
+        
+        this.updateProjectUseCase
+            .execute(id, updateProjectDto)
+            .then(updatedProject => res.json(updatedProject))
+            .catch(error => handleError(error, res));
+    }
+
+    toogleIsTop = (req: Request, res: Response) => {
+        const id = req.params.id || '';
+
+        this.toogleIsTopUseCase
+            .execute(id)
+            .then(() => res.json("Is top project toggle properly"))
+            .catch(err => handleError(err, res));
     }
 
     deleteProject = (req: Request, res: Response) => {

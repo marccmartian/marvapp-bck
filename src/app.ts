@@ -1,5 +1,4 @@
-import { EmailServiceImp, GetUsersUseCase, LoginUserUseCase, RegisterUserUseCase, ValidateEmailUseCase } from "./aplication";
-import { CreateProjectUseCase } from "./aplication/use-cases/project/create.use-case";
+import { CreateProjectUseCase, EmailServiceImp, GetProjectsUseCase, GetUsersUseCase, LoginUserUseCase, RegisterUserUseCase, ToogleIsTopUseCase, UpdateProjectUseCase, ValidateEmailUseCase } from "./aplication";
 import { EmailAdapter, envs, ProjectDatasourceImp, ProjectRepositoryImp, UserDatasourceImp, UserRepositoryImp } from "./infrastructure";
 import { AppRoutes, ProjectController, ProjectRoutes, Server, UserController, UserRoutes } from "./presentation";
 
@@ -34,7 +33,13 @@ async function main() {
         // Project Module
         const projectRepository = new ProjectRepositoryImp(new ProjectDatasourceImp());
         const createProjectUseCase = new CreateProjectUseCase(projectRepository);
-        const projectController = new ProjectController(createProjectUseCase);
+        const getProjectsUseCase = new GetProjectsUseCase(projectRepository);
+        const updateProjectUseCase = new UpdateProjectUseCase(projectRepository);
+        const toogleIsTopUseCase = new ToogleIsTopUseCase(projectRepository);
+        const projectController = new ProjectController(
+            createProjectUseCase, getProjectsUseCase,
+            updateProjectUseCase, toogleIsTopUseCase
+        );
 
         const projectRoutes = ProjectRoutes.getRoutes(projectController);
 
