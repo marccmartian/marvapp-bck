@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CreateProjectUseCase, GetProjectsUseCase, ToogleIsTopUseCase, UpdateProjectUseCase } from "../../aplication";
-import { CreateProjectDto, handleError, UpdateProjectDto } from "../../domain";
+import { CreateProjectDto, CustomError, handleError, ProjectRepository, UpdateProjectDto } from "../../domain";
+import { FileUploadService } from "../../infrastructure";
 
 
 export class ProjectController {
@@ -10,33 +11,58 @@ export class ProjectController {
         private readonly getProjectsUseCase: GetProjectsUseCase,
         private readonly updateProjectUseCase: UpdateProjectUseCase,
         private readonly toogleIsTopUseCase: ToogleIsTopUseCase,
+        private readonly fileUploadService: FileUploadService,
+        private readonly projectRepository: ProjectRepository
     ){}
 
-    createProject = (req: Request, res: Response) => {
-        const user = req.body.user;
-        const createProjectDto = CreateProjectDto.create({...req.body, userId: user.id});
+    createProject = async (req: Request, res: Response) => {
+        const user = req.body.user;        
+        const file = req.file as Express.Multer.File | undefined;
+        let imageUrl: string | null = null;
 
-        this.createProjectUseCase
-            .execute(createProjectDto)
-            .then(project => res.json(project))
-            .catch(error => handleError(error, res));
+        try {
+            if (file && user) imageUrl = await this.fileUploadService.upload(file);
+
+            const createProjectDto = CreateProjectDto.create({...req.body, userId: user.id, imageUrl});
+            const project = await this.createProjectUseCase.execute(createProjectDto);
+            
+            return res.json(project.toJson());
+        } catch (error) {
+            return handleError(error, res);
+        }
+
     }
     
     getProjects = (req: Request, res: Response) => {
         this.getProjectsUseCase
             .execute()
-            .then(projects => res.json(projects))
+            .then(responseData => {
+                const projectEntities = responseData.map(project => project.toJson());
+                res.json(projectEntities);
+            })
             .catch(error => handleError(error, res));
     }
 
-    updateProject = (req: Request, res: Response) => {
+    updateProject = async (req: Request, res: Response) => {
         const id = req.params.id || '';
-        const updateProjectDto = UpdateProjectDto.create(req.body);
-        
-        this.updateProjectUseCase
-            .execute(id, updateProjectDto)
-            .then(updatedProject => res.json(updatedProject))
-            .catch(error => handleError(error, res));
+        const file = req.file as Express.Multer.File | undefined;
+        let imageUrl: string | null | undefined = undefined;
+
+        try {
+            const oldProject = await this.projectRepository.findProjectById(id);
+            if (!oldProject) throw CustomError.notFound(`Project with id ${id} not found.`);
+
+            if(file) imageUrl = await this.fileUploadService.upload(file);
+            if(oldProject.imageUrl) await this.fileUploadService.deleteFile(oldProject.imageUrl);
+
+            const updateProjectDto = UpdateProjectDto.create({...req.body, id, imageUrl});
+            const project = await this.updateProjectUseCase.execute(updateProjectDto);
+
+            res.json(project.toJson());
+        } catch (error) {
+            return handleError(error, res);
+            
+        }
     }
 
     toogleIsTop = (req: Request, res: Response) => {

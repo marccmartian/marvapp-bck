@@ -9,7 +9,7 @@ export class ProjectDatasourceImp implements ProjectDatasource {
             const project = await prisma.project.findFirst({
                 where: {
                     OR: [
-                        { title: createProjectDto.title },
+                        { title: createProjectDto.title  },
                         { githubUrl: createProjectDto.githubUrl },
                         { prodUrl: createProjectDto.prodUrl },
                     ]
@@ -32,13 +32,34 @@ export class ProjectDatasourceImp implements ProjectDatasource {
         }
     }
 
+    async findConflictingProyect(dto: UpdateProjectDto): Promise<ProjectEntity | null> {
+        try {
+            const conditions: any[] = [];
+
+            if(dto.title) conditions.push({ title: dto.title });
+            if(dto.githubUrl) conditions.push({ githubUrl: dto.githubUrl });
+            if(dto.prodUrl) conditions.push({ prodUrl: dto.prodUrl });
+
+            const project = await prisma.project.findFirst({
+                where: {
+                    NOT: { id: dto.id },
+                    OR: conditions
+                }
+            });
+            
+            return project ? ProjectMapper.fromPrismaToProjectEntity(project) : null;
+        } catch (error) {
+            if(error instanceof CustomError) throw error;
+            throw CustomError.internalServer("Error finding conflicting project from database.");
+        }
+    }
 
     async createProject(createProjectDto: CreateProjectDto): Promise<ProjectEntity> {
-        const {title, description, keywords, githubUrl, prodUrl, userId} = createProjectDto;
-
         try {
+            const {title, description, keywords, githubUrl, prodUrl, imageUrl, userId} = createProjectDto;
+
             const project = await prisma.project.create({
-                data: { title, description, keywords, githubUrl, prodUrl, userId }
+                data: { title, description, keywords, githubUrl, prodUrl, imageUrl, userId }
             });
 
             return ProjectMapper.fromPrismaToProjectEntity(project);
@@ -58,12 +79,11 @@ export class ProjectDatasourceImp implements ProjectDatasource {
         }
     }
 
-    async updateProject(id: string, updateProjectDto: UpdateProjectDto): Promise<ProjectEntity> {
-        const { title, description, keywords, githubUrl, prodUrl } = updateProjectDto;
+    async updateProject(updateProjectDto: UpdateProjectDto): Promise<ProjectEntity> {         
         try {
             const updatedProject = await prisma.project.update({
-                where: { id },
-                data: { title, description, keywords, githubUrl, prodUrl }
+                where: { id: updateProjectDto.id },
+                data: updateProjectDto.toUpdatePayload()
             });
             return ProjectMapper.fromPrismaToProjectEntity(updatedProject);
         } catch (error) {
@@ -76,7 +96,7 @@ export class ProjectDatasourceImp implements ProjectDatasource {
         try {
             const project = await prisma.project.update({
                 where: { id: projectEntity.id },
-                data: { isTop: projectEntity.getIsTop }
+                data: { isTop: projectEntity.isTop }
             });
             return ProjectMapper.fromPrismaToProjectEntity(project);
         } catch (error) {

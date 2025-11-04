@@ -1,5 +1,5 @@
 import { CreateProjectUseCase, EmailServiceImp, GetProjectsUseCase, GetUsersUseCase, LoginUserUseCase, RegisterUserUseCase, ToogleIsTopUseCase, UpdateProjectUseCase, ValidateEmailUseCase } from "./aplication";
-import { EmailAdapter, envs, ProjectDatasourceImp, ProjectRepositoryImp, UserDatasourceImp, UserRepositoryImp } from "./infrastructure";
+import { CloudinaryAdapter, EmailAdapter, envs, FileUploadService, ProjectDatasourceImp, ProjectRepositoryImp, UserDatasourceImp, UserRepositoryImp } from "./infrastructure";
 import { AppRoutes, ProjectController, ProjectRoutes, Server, UserController, UserRoutes } from "./presentation";
 
 (async () => {
@@ -12,6 +12,13 @@ async function main() {
             envs.MAILER_SERVICE, 
             envs.MAILER_EMAIL, 
             envs.MAILER_SECRET_KEY
+        );
+
+        const cloudinaryAdapter = new CloudinaryAdapter(
+            envs.CLOUD_NAME,
+            envs.API_KEY,
+            envs.API_SECRET,
+            envs.FOLDER_NAME
         );
 
         // User module
@@ -31,6 +38,7 @@ async function main() {
         const userRoutes = UserRoutes.getRoutes(userController);
 
         // Project Module
+        const fileUploadService = new FileUploadService(cloudinaryAdapter);
         const projectRepository = new ProjectRepositoryImp(new ProjectDatasourceImp());
         const createProjectUseCase = new CreateProjectUseCase(projectRepository);
         const getProjectsUseCase = new GetProjectsUseCase(projectRepository);
@@ -38,7 +46,8 @@ async function main() {
         const toogleIsTopUseCase = new ToogleIsTopUseCase(projectRepository);
         const projectController = new ProjectController(
             createProjectUseCase, getProjectsUseCase,
-            updateProjectUseCase, toogleIsTopUseCase
+            updateProjectUseCase, toogleIsTopUseCase,
+            fileUploadService, projectRepository
         );
 
         const projectRoutes = ProjectRoutes.getRoutes(projectController);

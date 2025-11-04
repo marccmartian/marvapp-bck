@@ -1,6 +1,6 @@
 model Project {
     id          String   @id @default(uuid())
-    userId      String
+    userId      String   @unique
     title       String   @unique
     description String
     keywords    String[]

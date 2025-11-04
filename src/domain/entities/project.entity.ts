@@ -10,27 +10,27 @@ export class ProjectEntity {
         public imageUrl: string | null,
         public githubUrl: string,
         public prodUrl: string,
-        private status: boolean,
-        private isTop: boolean,
+        private _status: boolean,
+        private _isTop: boolean,
         public readonly createdAt: Date,
         public updatedAt: Date,
     ){}
 
-    public get getStatus(): boolean {
-        return this.status;
+    public get status(): boolean {
+        return this._status;
     }
 
-    public get getIsTop(): boolean {
-        return this.isTop;
+    public get isTop(): boolean {
+        return this._isTop;
     }
 
     public toogleStatus(): void {
-        this.status = !this.status;
+        this._status = !this._status;
         this.touch();
     }
 
     public toogleIsTop() {
-        this.isTop = !this.isTop;
+        this._isTop = !this._isTop;
         this.touch();
     }
 
@@ -41,7 +41,9 @@ export class ProjectEntity {
     static fromObject(object: {[key: string]: any}): ProjectEntity {
         const {id, title, description, keywords, imageUrl, githubUrl, prodUrl, status, isTop, createdAt, updatedAt} = object;
 
-        if(!id) throw CustomError.internalServer("Project entity mapping error: Missing ID");
+        if(!id || !title || !description || !keywords || !githubUrl || !prodUrl || status === undefined || isTop === undefined || !createdAt || !updatedAt) {
+            throw CustomError.internalServer("Project entity mapping error: Missing one or more required fields.");
+        } 
 
         return new ProjectEntity(
             id, title, description, keywords,
@@ -49,6 +51,22 @@ export class ProjectEntity {
             status, isTop,
             new Date(createdAt), new Date(updatedAt)
         );
+    }
+
+    public toJson() {
+        return {
+            id: this.id,
+            title: this.title,
+            description: this.description,
+            keywords: this.keywords,
+            imageUrl: this.imageUrl, 
+            githubUrl: this.githubUrl,
+            prodUrl: this.prodUrl,
+            status: this.status, 
+            isTop: this.isTop,
+            // createdAt: this.createdAt.toISOString(),
+            // updatedAt: this.updatedAt.toISOString(),
+        };
     }
 
 }

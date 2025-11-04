@@ -17,6 +17,10 @@ export class ProjectRepositoryImp implements ProjectRepository {
     findProjectById(id: string): Promise<ProjectEntity | null> {
         return this.projectDatasource.findProjectById(id);
     }
+
+    findConflictingProyect(dto: UpdateProjectDto): Promise<ProjectEntity | null> {
+        return this.projectDatasource.findConflictingProyect(dto);
+    }
     
     createProject(createProjectDto: CreateProjectDto): Promise<ProjectEntity> {
         return this.projectDatasource.createProject(createProjectDto);
@@ -26,8 +30,8 @@ export class ProjectRepositoryImp implements ProjectRepository {
         return this.projectDatasource.getProjects();
     }
 
-    updateProject(id: string, updateProjectDto: UpdateProjectDto): Promise<ProjectEntity>{
-        return this.projectDatasource.updateProject(id, updateProjectDto);
+    updateProject(updateProjectDto: UpdateProjectDto): Promise<ProjectEntity>{
+        return this.projectDatasource.updateProject(updateProjectDto);
     }
 
     updateIstop(projectEntity: ProjectEntity): Promise<ProjectEntity>{

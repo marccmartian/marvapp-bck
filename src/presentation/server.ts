@@ -1,5 +1,6 @@
 import express, {Express, Router} from 'express';
 import http from 'http';
+import path from 'path';
 
 interface Options {
     public_path?: string;
@@ -29,6 +30,7 @@ export class Server {
         this.app.use(express.urlencoded({extended: true}));
         this.app.use(this.routes);
         this.app.use(express.static(this.publicPath));
+        this.app.use('/assets', express.static(path.join(__dirname, '../..', 'assets')));
     }
     
     public start(){

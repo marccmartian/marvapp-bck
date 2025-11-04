@@ -1,6 +1,7 @@
 export * from './controllers/project.controller';
 export * from './controllers/user.controller';
 export * from './middlewares/auth.middleware';
+export * from './middlewares/upload.middleware';
 export * from './middlewares/validate-fields.middleware';
 export * from './middlewares/validators/helpers/string-sanitizer';
 export * from './middlewares/validators/project/create.validator';

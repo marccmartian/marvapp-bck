@@ -8,11 +8,13 @@ export interface ProjectRepository {
 
     findProjectById(id: string): Promise<ProjectEntity | null>;
 
+    findConflictingProyect(dto: UpdateProjectDto): Promise<ProjectEntity | null>;
+
     createProject(createProjectDto: CreateProjectDto): Promise<ProjectEntity>;
 
     getProjects(): Promise<ProjectEntity[]>;
 
-    updateProject(id: string, updateProjectDto: UpdateProjectDto): Promise<ProjectEntity>;
+    updateProject(updateProjectDto: UpdateProjectDto): Promise<ProjectEntity>;
 
     updateIstop(projectEntity: ProjectEntity): Promise<ProjectEntity>;
 
