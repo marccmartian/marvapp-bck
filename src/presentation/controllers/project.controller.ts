@@ -1,4 +1,4 @@
-import { Request, response, Response } from "express";
+import { Request, Response } from "express";
 import { CreateProjectUseCase, GetProjectsUseCase, GetProjectUseCase, ToogleIsTopUseCase, UpdateProjectUseCase } from "../../aplication";
 import { CreateProjectDto, CustomError, handleError, ProjectRepository, UpdateProjectDto } from "../../domain";
 import { FileUploadService } from "../../infrastructure";
