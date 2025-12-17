@@ -18,14 +18,14 @@ export class UpdateProjectValidator {
             .isLength({ min: 5 }).withMessage("Tile must have at least 5 characters")
             .customSanitizer(StringSanitizer.capitalizeFirstWord),
         
-        body("keywords")
+        body("tags")
             .optional({ nullable: true })
-            .notEmpty().withMessage("Missing keywords")
+            .notEmpty().withMessage("Missing tags")
             .bail()
-            .isArray().withMessage("keywords must be an array")
-            .custom(value => value.length >= 2).withMessage("keywords must be greater than one"),
+            .isArray().withMessage("tags must be an array")
+            .custom(value => value.length >= 2).withMessage("tags must be greater than one"),
         
-        body("keywords.*")
+        body("tags.*")
             .optional()
             .isString().withMessage("Each keyword must be a string")
             .bail()

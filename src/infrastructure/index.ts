@@ -5,8 +5,6 @@ export * from './adapters/envs.adapter';
 export * from './adapters/jwt.adapter';
 export * from './adapters/multer-file.adapter';
 export * from './database/prisma/prisma-client';
-export * from './datasources/user.datasource.imp';
-export * from './datasources/project.datasource.imp';
 export * from './mappers/user.mapper';
 export * from './mappers/project.mapper';
 export * from './repositories/user.repository.imp';

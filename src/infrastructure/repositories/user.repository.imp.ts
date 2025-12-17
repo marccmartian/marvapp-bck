@@ -1,30 +1,70 @@
-import { UserDatasource } from "../../domain/datasources/user.datasource";
-import { LoginUserDto } from "../../domain/dtos/users/login-user.dto";
+import { CustomError } from "../../domain";
 import { RegisterUserDto } from "../../domain/dtos/users/register-user.dto";
-import { UserResponseDto } from "../../domain/dtos/users/response-user.dto";
 import { UserEntity } from "../../domain/entities/user.entity";
 import { UserRepository } from "../../domain/repositories/user.repository";
+import { prisma } from "../database/prisma/prisma-client";
+import { UserMapper } from "../mappers/user.mapper";
 
 export class UserRepositoryImp implements UserRepository {
 
-    constructor(
-        private readonly userDatasource: UserDatasource
-    ){}
+async findByEmail(email: string): Promise<UserEntity | null> {
+        try {
+            const user = await prisma.user.findUnique({ where: { email } });            
+            return user ? UserMapper.fromPrismaToUserEntity(user) : null;
+        } catch (error) {
+            if(error instanceof CustomError) throw error;
+            throw CustomError.internalServer("Error searching user database.");
+        }
 
-    async findByEmail(email: string): Promise<UserEntity | null> {
-        return await this.userDatasource.findByEmail(email);
     }
-        
+    
     async register(registerUserDto: RegisterUserDto): Promise<UserEntity> {
-        return await this.userDatasource.register(registerUserDto);
+        const {name, surname, email, password} = registerUserDto;
+
+        try {    
+            const user = await prisma.user.create({
+                data: {
+                    name, 
+                    surname, 
+                    email, 
+                    password
+                }
+            });
+            
+            return UserMapper.fromPrismaToUserEntity(user);
+        } catch (error) {
+            if(error instanceof CustomError) throw error;
+            throw CustomError.internalServer("Error saving user to database.");
+        }
     }
 
     async update(userEntity: UserEntity): Promise<UserEntity> {
-        return await this.userDatasource.update(userEntity);
+        try {
+            const updatedUser = await prisma.user.update({
+                where: { id: userEntity.id },
+                data: {
+                    name: userEntity.name,
+                    surname: userEntity.surname,
+                    role: userEntity.role,
+                    isEmailValidated: userEntity.isEmailValidated,
+                }
+            });
+
+            return UserMapper.fromPrismaToUserEntity(updatedUser);
+        } catch (error) {
+            throw CustomError.internalServer("Error updating user in database.");
+        }
+        
     }
-    
+
     async getAll(): Promise<UserEntity[]> {
-        return await this.userDatasource.getAll();
+        try {
+            const users = await prisma.user.findMany();
+            return users.map(UserMapper.fromPrismaToUserEntity);
+        } catch (error) {
+            if(error instanceof CustomError) throw error;
+            throw CustomError.internalServer("Error getting all users");
+        }
     }
 
 }

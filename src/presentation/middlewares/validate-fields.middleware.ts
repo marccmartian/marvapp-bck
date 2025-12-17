@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { validationResult } from "express-validator";
+import { validationResult, matchedData } from "express-validator";
 
 export const validateFields = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -9,6 +9,8 @@ export const validateFields = (req: Request, res: Response, next: NextFunction) 
             // errors: errors
         });
     }
+
+    req.validatedData = matchedData(req, { locations: ['query'] }) as any;
     
     next();
 }

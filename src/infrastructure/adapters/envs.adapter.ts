@@ -26,7 +26,9 @@ export const envs = {
     API_KEY: get('API_KEY').required().asString(),
     API_SECRET: get('API_SECRET').required().asString(),
     FOLDER_NAME: get('FOLDER_NAME').required().asString(),
-    CLOUDINARY_URL: get('CLOUDINARY_URL').required().asString()
+    CLOUDINARY_URL: get('CLOUDINARY_URL').required().asString(),
+
+    FRONTEND_URL: get('FRONTEND_URL').required().asString(),
     
 }
 

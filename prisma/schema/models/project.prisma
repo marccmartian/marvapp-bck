@@ -1,9 +1,10 @@
 model Project {
     id          String   @id @default(uuid())
-    userId      String   @unique
+    serialId    Int      @unique @default(autoincrement())
+    userId      String
     title       String   @unique
     description String
-    keywords    String[]
+    tags        String[]
     imageUrl    String?  @unique
     githubUrl   String   @unique
     prodUrl     String   @unique
@@ -14,5 +15,5 @@ model Project {
 
     user User @relation(fields: [userId], references: [id])
 
-    @@index([title, description, keywords])
+    @@index([title, description, tags])
 }

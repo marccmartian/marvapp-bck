@@ -5,7 +5,7 @@ export class CreateProjectDto {
     constructor(
         public title: string,
         public description: string,
-        public keywords: string[],
+        public tags: string[],
         public githubUrl: string,
         public prodUrl: string,
         public imageUrl: string | null,
@@ -13,15 +13,15 @@ export class CreateProjectDto {
     ){}
 
     static create(data: Partial<CreateProjectDto>): CreateProjectDto {
-        let {title, description, keywords, githubUrl, prodUrl, imageUrl, userId} = data;
+        let {title, description, tags, githubUrl, prodUrl, imageUrl, userId} = data;
         
-        if(!title || ! description || !keywords || !githubUrl || !prodUrl || !userId) {
+        if(!title || ! description || !tags || !githubUrl || !prodUrl || !userId) {
             throw CustomError.internalServer("Missing required fields for project DTO creation.");
         }
 
         if(imageUrl === undefined) imageUrl = null;
         
-        return new CreateProjectDto(title, description, keywords, githubUrl, prodUrl, imageUrl, userId);
+        return new CreateProjectDto(title, description, tags, githubUrl, prodUrl, imageUrl, userId);
     }
 
 }

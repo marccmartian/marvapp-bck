@@ -5,5 +5,6 @@ export * from './use-cases/user/get-all.use-case';
 export * from './use-cases/user/validate-email.use-case';
 export * from './use-cases/project/create.use-case';
 export * from './use-cases/project/get-all.use-case';
+export * from './use-cases/project/get.use-case';
 export * from './use-cases/project/toogle.use-case';
 export * from './use-cases/project/update.use-case';

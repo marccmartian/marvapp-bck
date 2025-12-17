@@ -6,14 +6,14 @@ export class UpdateProjectDto {
         public readonly id: string,
         public readonly title?: string,
         public readonly description?: string,
-        public readonly keywords?: string[],
+        public readonly tags?: string[],
         public readonly githubUrl?: string,
         public readonly prodUrl?: string,
         public readonly imageUrl?: string | null
     ){}
 
     static create(data: {[key: string]: any}): UpdateProjectDto {
-        const {id, title, description, keywords, githubUrl, prodUrl, imageUrl} = data;
+        const {id, title, description, tags, githubUrl, prodUrl, imageUrl} = data;
         const updateObject: {[key: string]: any} = {};
 
         if(!id){
@@ -23,11 +23,11 @@ export class UpdateProjectDto {
         if(title !== undefined) updateObject.title = title;
         if(description !== undefined) updateObject.description = description;
 
-        if(keywords !== undefined) {
-            if(!Array.isArray(keywords)) {
-                throw CustomError.badRequest("Keywords must be an array.");
+        if(tags !== undefined) {
+            if(!Array.isArray(tags)) {
+                throw CustomError.badRequest("tags must be an array.");
             }
-            updateObject.keywords = keywords;
+            updateObject.tags = tags;
         }
 
         if (githubUrl !== undefined) updateObject.githubUrl = githubUrl;
@@ -39,7 +39,7 @@ export class UpdateProjectDto {
         }
 
         return new UpdateProjectDto(
-            id, updateObject.title, updateObject.description, updateObject.keywords, 
+            id, updateObject.title, updateObject.description, updateObject.tags, 
             updateObject.githubUrl, updateObject.prodUrl, updateObject.imageUrl
         );
     }

@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { CreateProjectUseCase, GetProjectsUseCase, ToogleIsTopUseCase, UpdateProjectUseCase } from "../../aplication";
+import { Request, response, Response } from "express";
+import { CreateProjectUseCase, GetProjectsUseCase, GetProjectUseCase, ToogleIsTopUseCase, UpdateProjectUseCase } from "../../aplication";
 import { CreateProjectDto, CustomError, handleError, ProjectRepository, UpdateProjectDto } from "../../domain";
 import { FileUploadService } from "../../infrastructure";
 
@@ -9,6 +9,7 @@ export class ProjectController {
     constructor(
         private readonly createProjectUseCase: CreateProjectUseCase,
         private readonly getProjectsUseCase: GetProjectsUseCase,
+        private readonly getProjectUseCase: GetProjectUseCase,
         private readonly updateProjectUseCase: UpdateProjectUseCase,
         private readonly toogleIsTopUseCase: ToogleIsTopUseCase,
         private readonly fileUploadService: FileUploadService,
@@ -34,12 +35,23 @@ export class ProjectController {
     }
     
     getProjects = (req: Request, res: Response) => {
+        const validated = req.validatedData;
+        const limit = validated.limit || 9;
+        const isTopFilter = validated.isTop;
+        const lastSerialId = validated.lastSerialId; 
+
         this.getProjectsUseCase
-            .execute()
-            .then(responseData => {
-                const projectEntities = responseData.map(project => project.toJson());
-                res.json(projectEntities);
-            })
+            .execute(limit, lastSerialId, isTopFilter)
+            .then(response => res.json(response))
+            .catch(error => handleError(error, res));
+    }
+
+    getProject = (req: Request, res: Response) => {
+        const id = req.params.id || "";     
+
+        this.getProjectUseCase
+            .execute(id)
+            .then(response => res.json(response.toJson()))
             .catch(error => handleError(error, res));
     }
 

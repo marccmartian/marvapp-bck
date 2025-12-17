@@ -4,9 +4,10 @@ export class ProjectEntity {
 
     constructor(
         public readonly id: string,
+        public readonly serialId: number,
         public title: string,
         public description: string,
-        public keywords: string[],
+        public tags: string[],
         public imageUrl: string | null,
         public githubUrl: string,
         public prodUrl: string,
@@ -39,14 +40,14 @@ export class ProjectEntity {
     }
 
     static fromObject(object: {[key: string]: any}): ProjectEntity {
-        const {id, title, description, keywords, imageUrl, githubUrl, prodUrl, status, isTop, createdAt, updatedAt} = object;
+        const {id, serialId, title, description, tags, imageUrl, githubUrl, prodUrl, status, isTop, createdAt, updatedAt} = object;
 
-        if(!id || !title || !description || !keywords || !githubUrl || !prodUrl || status === undefined || isTop === undefined || !createdAt || !updatedAt) {
+        if(!id || !serialId || !title || !description || !tags || !githubUrl || !prodUrl || status === undefined || isTop === undefined || !createdAt || !updatedAt) {
             throw CustomError.internalServer("Project entity mapping error: Missing one or more required fields.");
         } 
 
         return new ProjectEntity(
-            id, title, description, keywords,
+            id, serialId, title, description, tags,
             imageUrl, githubUrl, prodUrl,
             status, isTop,
             new Date(createdAt), new Date(updatedAt)
@@ -58,7 +59,7 @@ export class ProjectEntity {
             id: this.id,
             title: this.title,
             description: this.description,
-            keywords: this.keywords,
+            tags: this.tags,
             imageUrl: this.imageUrl, 
             githubUrl: this.githubUrl,
             prodUrl: this.prodUrl,

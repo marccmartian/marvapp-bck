@@ -1,5 +1,5 @@
-import { CreateProjectUseCase, EmailServiceImp, GetProjectsUseCase, GetUsersUseCase, LoginUserUseCase, RegisterUserUseCase, ToogleIsTopUseCase, UpdateProjectUseCase, ValidateEmailUseCase } from "./aplication";
-import { CloudinaryAdapter, EmailAdapter, envs, FileUploadService, ProjectDatasourceImp, ProjectRepositoryImp, UserDatasourceImp, UserRepositoryImp } from "./infrastructure";
+import { CreateProjectUseCase, EmailServiceImp, GetProjectsUseCase, GetProjectUseCase, GetUsersUseCase, LoginUserUseCase, RegisterUserUseCase, ToogleIsTopUseCase, UpdateProjectUseCase, ValidateEmailUseCase } from "./aplication";
+import { CloudinaryAdapter, EmailAdapter, envs, FileUploadService, ProjectRepositoryImp, UserRepositoryImp } from "./infrastructure";
 import { AppRoutes, ProjectController, ProjectRoutes, Server, UserController, UserRoutes } from "./presentation";
 
 (async () => {
@@ -23,9 +23,7 @@ async function main() {
 
         // User module
         const emailService = new EmailServiceImp(emailAdapter);
-        const userDatasource = new UserDatasourceImp();
-        const userRepository = new UserRepositoryImp(userDatasource);
-
+        const userRepository = new UserRepositoryImp();
         const registeUserUseCase = new RegisterUserUseCase(userRepository, emailService);
         const loginUserUseCase = new LoginUserUseCase(userRepository);
         const getUsersUseCase = new GetUsersUseCase(userRepository);
@@ -39,13 +37,14 @@ async function main() {
 
         // Project Module
         const fileUploadService = new FileUploadService(cloudinaryAdapter);
-        const projectRepository = new ProjectRepositoryImp(new ProjectDatasourceImp());
+        const projectRepository = new ProjectRepositoryImp();
         const createProjectUseCase = new CreateProjectUseCase(projectRepository);
         const getProjectsUseCase = new GetProjectsUseCase(projectRepository);
+        const getProjectUseCase = new GetProjectUseCase(projectRepository);
         const updateProjectUseCase = new UpdateProjectUseCase(projectRepository);
         const toogleIsTopUseCase = new ToogleIsTopUseCase(projectRepository);
         const projectController = new ProjectController(
-            createProjectUseCase, getProjectsUseCase,
+            createProjectUseCase, getProjectsUseCase, getProjectUseCase,
             updateProjectUseCase, toogleIsTopUseCase,
             fileUploadService, projectRepository
         );
@@ -55,7 +54,8 @@ async function main() {
         // Server
         const server = new Server({
             port: envs.PORT,
-            routes: AppRoutes.getRoutes(userRoutes, projectRoutes)
+            routes: AppRoutes.getRoutes(userRoutes, projectRoutes),
+            frontedUrl: envs.FRONTEND_URL
         });
 
         server.start();
