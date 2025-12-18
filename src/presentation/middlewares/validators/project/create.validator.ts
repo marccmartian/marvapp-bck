@@ -14,7 +14,7 @@ export class CreateProjectValidator {
             .notEmpty().withMessage("Missing description")
             .bail()
             .isLength({ min: 5 }).withMessage("Tile must have at least 5 characters")
-            .customSanitizer(value => StringSanitizer.capitalizeWords(value)),
+            .customSanitizer(value => StringSanitizer.capitalizeFirstWord(value)),
         
         body("tags")
             .notEmpty().withMessage("Missing tags")
