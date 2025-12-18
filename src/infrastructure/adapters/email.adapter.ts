@@ -23,10 +23,10 @@ export class EmailAdapter {
         mailerPassword: string
     ){
         this.transporter = nodemailer.createTransport({
-            service: mailerService,
-            host: mailerService === 'gmail' ? 'smtp.gmail.com' : undefined,
-            port: 465,
-            secure: true,
+            // service: mailerService,
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
             auth: {
                 user: mailerEmail,
                 pass: mailerPassword
