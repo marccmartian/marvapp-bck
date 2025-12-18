@@ -42,7 +42,8 @@ export class EmailAdapter {
             });
             // console.log(info);
             return true
-        } catch (error) {            
+        } catch (error) {
+            console.error("Error enviando email:", error);        
             return false
         }
     }
