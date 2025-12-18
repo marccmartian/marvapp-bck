@@ -16,6 +16,7 @@ export class EmailAdapter {
 
     private transporter: Transporter;
 
+    // las props: host, port, secure, connectionTimeout, se agregaron para producción
     constructor(
         mailerService: string,
         mailerEmail: string,
@@ -23,10 +24,14 @@ export class EmailAdapter {
     ){
         this.transporter = nodemailer.createTransport({
             service: mailerService,
+            host: mailerService === 'gmail' ? 'smtp.gmail.com' : undefined,
+            port: 465,
+            secure: true,
             auth: {
                 user: mailerEmail,
                 pass: mailerPassword
-            }
+            },
+            connectionTimeout: 10000,
         })
     }
 
